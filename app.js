@@ -1,1 +1,1 @@
-alert("watch out");
+alert("Get out");
