@@ -5,32 +5,64 @@
     <meta name="viewport" content="width=, initial-scale=1.0">
     <title>Document</title>
 
-<link rel="stylesheet" href="Style/navbar.css">
+<!-- Minified version -->
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
 
+<!-- Un-Minified version -->
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
 
+<style>
+.dropbtn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+</style>
 </head>
 <body>
     <nav >
 
-<ul>
 
-<li><a href="Authentification/Login.html">log in</a></li>
-<li><a href="Authentification/Signup.html">sign up</a></li>
-<li>
-    <select name="" id="" >
-<option value="Profile">Profile</option>
-<option value="Account_settings">Account Settings</option>
-<option value="Preferences">Preferences</option>
-<option value="Logout">Logout</option>
+<div class="dropdown">
+  <button class="dropbtn">You</button>
+  <div class="dropdown-content">
+    <a href="Authentification/Login.html">Profile</a>
+    <a href="#">Account Settings</a>
+    <a href="">Preferences</a>
+    <a href="#">Log Out</a>
+  </div>
+</div>
 
 
-
-    </select>
-  
-
-</li>
-<li><a href="Authentification/Logout.html">log out</a></li>
-</ul>
 
 
     </nav>
