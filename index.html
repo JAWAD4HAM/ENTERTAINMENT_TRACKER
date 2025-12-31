@@ -3,28 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
-    <!-- Minified version -->
-<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-
-<!-- Un-Minified version -->
-<link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
-    
+    <title>My Media Library</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
 
-<fieldset>
-    Books
-</fieldset>
 
-<fieldset>
-    Movies
-</fieldset>
 
-<fieldset>
-    Series
-</fieldset>
-    
+    <header class="hero">
+        <div class="hero-content">
+            <h1>All your entertainment, <br>in one place.</h1>
+            <p>Track what you read, watch, and binge.</p>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <section class="category-section">
+            <h2>Browse by Category</h2>
+            <div class="category-grid">
+                
+                <a href="#" class="cat-card books">
+                    <div class="icon-box"><i class="fa fa-book"></i></div>
+                    <h3>Books</h3>
+                    <p>Novels, Manga & Comics</p>
+                </a>
+
+                <a href="#" class="cat-card movies">
+                    <div class="icon-box"><i class="fa fa-film"></i></div>
+                    <h3>Movies</h3>
+                    <p>Feature films & Documentaries</p>
+                </a>
+
+                <a href="#" class="cat-card series">
+                    <div class="icon-box"><i class="fa fa-tv"></i></div>
+                    <h3>Series</h3>
+                    <p>TV Shows & Anime</p>
+                </a>
+
+            </div>
+        </section>
+
+        <section class="recent-section">
+            <h2>Recently Added</h2>
+            <div id="large-th"> <div class="media-grid-preview">
+                    
+                    <div class="media-item">
+                        <div class="cover">
+                            <span class="badge movie">Movie</span>
+                            <img src="https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg">
+                        </div>
+                        <div class="description">
+                            <p class="title">Shawshank Redemption<br>
+                            <span class="creator">Frank Darabont</span></p>
+                        </div>
+                    </div>
+
+                    <div class="media-item">
+                        <div class="cover">
+                            <span class="badge manga">Manga</span>
+                            <img src="https://upload.wikimedia.org/wikipedia/en/9/90/One_Piece%2C_Volume_61_Cover_%28Japanese%29.jpg">
+                        </div>
+                        <div class="description">
+                            <p class="title">One Piece<br>
+                            <span class="creator">Eiichiro Oda</span></p>
+                        </div>
+                    </div>
+                     <div class="media-item">
+                        <div class="cover">
+                            <span class="badge book">Book</span>
+                            <img src="https://m.media-amazon.com/images/I/81a4kCNuH+L.jpg">
+                        </div>
+                        <div class="description">
+                            <p class="title">Frankenstein<br>
+                            <span class="creator">Mary Shelley</span></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+
 </body>
 </html>
