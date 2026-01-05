@@ -3,15 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard & Lists</title>
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="/assets/css/navbar.css">
+<link rel="stylesheet" href="/assets/css/footer.css">
+
+
 </head>
 <body>
-    
+<div id="navbar-container"></div>
 
-<Fieldset>Statistics</Fieldset>
+    <!-- NAVBAR (from mylist.html) -->
+   
+<main class="dashboard-layout">
 
-<fieldset>Anime Stats</fieldset>
-<fieldset>Movies stats</fieldset>
+  <!-- SIDEBAR -->
+  <aside class="profile-card">
+    <img src="/assets/images/cute-cat-concept-adorable-domestic-600nw-2480967273.webp" class="avatar" alt="Profile">
+    <h3>Jawad</h3>
+    <p class="status online">Online</p>
+
+    <ul class="profile-menu">
+     
+      <li><button class="menu-btn active">Movies List</button></li>
+      <li><button class="menu-btn active">Series List</button></li>
+      <li><button class="menu-btn active">Anime List</button></li>
+      <li><button class="menu-btn active">Manga List</button></li>
+      <li><button class="menu-btn active">Comics List</button></li>
+      <li><button class="menu-btn active">Novels List</button></li>
+      <li><button class="menu-btn active">Games List</button></li>
+      <li><button class="menu-btn active">Statistics</button></li>
+      <li><button class="menu-btn active">History</button></li>
+      <li><button class="menu-btn active">Favorites</button></li>
+  
+    </ul>
+  </aside>
+    <!-- MAIN CONTENT -->
+ <section class="dashboard-content">
+
+
+
+
+
+<!-- ========= MOVIES ========= -->
+<div class="stats-card">
+  <header>
+    <h3>Movies</h3>
+    <span>Mean 7.4</span>
+  </header>
+
+  <div class="bar">
+    <span class="completed" style="width:90%"></span>
+    <span class="plan" style="width:10%"></span>
+  </div>
+
+  <div class="stats">
+    <ul>
+    <li><i class="watching"></i>Watching <b>2</b></li>
+      <li><i class="completed"></i>Completed <b>91</b></li>
+      <li><i class="onhold"></i>On-Hold <b>2</b></li>
+      <li><i class="dropped"></i>Dropped <b>3</b></li>
+    </ul>
+    <ul>
+      <li>Total <b>19</b></li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ========= SERIES ========= -->
+<div class="stats-card">
+  <header>
+    <h3>Series</h3>
+    <span>Mean 7.9</span>
+  </header>
+
+  <div class="bar">
+    <span class="completed" style="width:71%"></span>
+    <span class="watching" style="width:15%"></span>
+    <span class="onhold" style="width:14%"></span>
+  </div>
+
+  <div class="stats">
+    <ul>
+      <li><i class="watching"></i>Watching <b>2</b></li>
+      <li><i class="completed"></i>Completed <b>91</b></li>
+      <li><i class="onhold"></i>On-Hold <b>2</b></li>
+      <li><i class="dropped"></i>Dropped <b>3</b></li>
+    </ul>
+    <ul>
+      <li>Total <b>7</b></li>
+    </ul>
+  </div>
+</div>
+
+
+
+
+<!-- ========= ANIME ========= -->
+<div class="stats-card">
+  <header>
+    <h3>Anime</h3>
+    <span>Days 50.7 · Mean 7.8</span>
+  </header>
+
+  <div class="bar">
+    <span class="completed" style="width:95%"></span>
+    <span class="onhold" style="width:3%"></span>
+    <span class="dropped" style="width:2%"></span>
+  </div>
+
+  <div class="stats">
+    <ul>
+      <li><i class="watching"></i>Watching <b>2</b></li>
+      <li><i class="completed"></i>Completed <b>91</b></li>
+      <li><i class="onhold"></i>On-Hold <b>2</b></li>
+      <li><i class="dropped"></i>Dropped <b>3</b></li>
+    </ul>
+    <ul>
+      <li>Total <b>96</b></li>
+      <li>Episodes <b>2992</b></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========= MANGA ========= -->
+<div class="stats-card">
+  <header>
+    <h3>Manga</h3>
+    <span>Days 0.2 · Mean 0.0</span>
+  </header>
+
+  <div class="bar">
+    <span class="completed" style="width:60%"></span>
+    <span class="onhold" style="width:40%"></span>
+  </div>
+
+  <div class="stats">
+    <ul>
+      <li><i class="watching"></i>Reading <b>2</b></li>
+      <li><i class="completed"></i>Completed <b>3</b></li>
+      <li><i class="onhold"></i>On-Hold <b>2</b></li>
+      <li><i class="dropped"></i>Dropped <b>3</b></li>
+    </ul>
+    <ul>
+      <li>Total <b>5</b></li>
+      <li>Chapters <b>17</b></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========= COMICS ========= -->
+<div class="stats-card">
+  <header>
+    <h3>Comics</h3>
+    <span>Mean 7.2</span>
+  </header>
+
+  <div class="bar">
+    <span class="completed" style="width:67%"></span>
+    <span class="reading" style="width:17%"></span>
+    <span class="onhold" style="width:8%"></span>
+    <span class="dropped" style="width:8%"></span>
+  </div>
+
+  <div class="stats">
+    <ul>
+     <li><i class="watching"></i>Reading <b>2</b></li>
+      <li><i class="completed"></i>Completed <b>3</b></li>
+      <li><i class="onhold"></i>On-Hold <b>2</b></li>
+      <li><i class="dropped"></i>Dropped <b>3</b></li>
+    </ul>
+    <ul>
+      <li>Total <b>12</b></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========= NOVELS ========= -->
+<div class="stats-card">
+  <header>
+    <h3>Novels</h3>
+    <span>Mean 7.0</span>
+  </header>
+
+  <div class="bar">
+    <span class="completed" style="width:50%"></span>
+    <span class="reading" style="width:25%"></span>
+    <span class="onhold" style="width:12%"></span>
+    <span class="dropped" style="width:13%"></span>
+  </div>
+
+  <div class="stats">
+    <ul>
+        <li><i class="watching"></i>Reading <b>2</b></li>
+      <li><i class="completed"></i>Completed <b>3</b></li>
+      <li><i class="onhold"></i>On-Hold <b>2</b></li>
+      <li><i class="dropped"></i>Dropped <b>3</b></li>
+    </ul>
+    <ul>
+      <li>Total <b>8</b></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ========= GAMES ========= -->
+<div class="stats-card">
+  <header>
+    <h3>Games</h3>
+    <span>Mean 8.1</span>
+  </header>
+
+  <div class="bar">
+    <span class="completed" style="width:64%"></span>
+    <span class="playing" style="width:22%"></span>
+    <span class="onhold" style="width:7%"></span>
+    <span class="dropped" style="width:7%"></span>
+  </div>
+
+  <div class="stats">
+    <ul>
+      
+      <li><i class="playing"></i>Playing <b>3</b></li>
+       <li><i class="completed"></i>Completed <b>3</b></li>
+      <li><i class="onhold"></i>On-Hold <b>2</b></li>
+      <li><i class="dropped"></i>Dropped <b>3</b></li>
+    </ul>
+    <ul>
+      <li>Total <b>14</b></li>
+    </ul>
+  </div>
+</div>
+
+</section>
+
+
+</main>
+
+
+<script>
+fetch("/components/navbar.html")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("navbar-container").innerHTML = html;
+  });
+</script>
+
+<script>
+fetch("/components/footer.html")
+  .then(res => res.text())
+  .then(html => {
+    document.getElementById("footer-container").innerHTML = html;
+  });
+</script>
+
+
+<div id="footer-container"></div>
 
 </body>
 </html>
