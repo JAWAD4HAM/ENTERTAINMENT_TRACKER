@@ -1,320 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard & Lists</title>
-<link rel="stylesheet" href="/assets/css/main.css">
-<link rel="stylesheet" href="/assets/css/navbar.css">
-<link rel="stylesheet" href="/assets/css/footer.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard - Entertainment Tracker</title>
 
-<style>
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/navbar.css">
+  <link rel="stylesheet" href="/assets/css/footer.css">
 
-  #list-view {
-  grid-column: 1 / -1;
-}
+  <style>
+    .dashboard-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-</style>
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
 
+    .chart-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      flex: 1;
+      min-width: 300px;
+      color: #333;
+    }
+
+    .list-section {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f8f9fa;
+    }
+
+    .action-btn {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    .btn-delete {
+      background-color: #ff4d4d;
+      color: white;
+    }
+
+    .btn-save {
+      background-color: #4CAF50;
+      color: white;
+    }
+  </style>
 </head>
+
 <body>
-<div id="navbar-container"></div>
 
-    <!-- NAVBAR (from mylist.html) -->
-   
-<main class="dashboard-layout">
+  <div id="navbar-container"></div>
 
-  <!-- SIDEBAR -->
-  <aside class="profile-card">
-    <img src="https://atelierkristel.com/wp-content/uploads/2020/09/The-Joker-SH.jpg" class="avatar" alt="Profile">
-    <h3>Jawad</h3>
-    <p class="status online">Online</p>
+  <div class="dashboard-container">
+    <h1 style="color:white; margin-bottom: 20px;">My Dashboard</h1>
 
-    <ul class="profile-menu">
-     
-      <li><a href="MyList.html?category=movies" onclick="openList(event, 'movies')"><button class="menu-btn active">Movies List</button></a></li>
-      <li><a href="MyList.html?category=series" onclick="openList(event, 'series')"><button class="menu-btn active">Series List</button></a></li>
-      <li><a href="MyList.html?category=animes" onclick="openList(event, 'animes')"><button class="menu-btn active">Anime List</button></a></li>
-      <li><a href="MyList.html?category=mangas" onclick="openList(event, 'mangas')"><button class="menu-btn active">Manga List</button></a></li>
-      <li><a href="MyList.html?category=comics" onclick="openList(event, 'comics')"><button class="menu-btn active">Comics List</button></a></li>
-      <li><a href="MyList.html?category=novels" onclick="openList(event, 'novels')"><button class="menu-btn active">Novels List</button></a></li>
-      <li><a href="MyList.html?category=games"  onclick="openList(event, 'games')"><button class="menu-btn active">Games List</button></a></li>
-      <li><a href="#" onclick="showDashboard(); return false;"><button class="menu-btn active">Dashboard</button></a></li>
-      <li><a href="MyList.html?category="><button class="menu-btn active">Statistics</button></a></li>
-      <li><a href="MyList.html?category="><button class="menu-btn active">History</button></a></li>
-      <li><a href="MyList.html?category="><button class="menu-btn active">Favorites</button></a></li>
-  
-    </ul>
-  </aside>
-    <!-- MAIN CONTENT -->
- <section class="dashboard-content">
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="chart-card">
+        <h3>Library Composition</h3>
+        <canvas id="typeChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Status Breakdown</h3>
+        <canvas id="statusChart"></canvas>
+      </div>
+    </div>
 
-
-
-
-
-<!-- ========= MOVIES ========= -->
-<div class="stats-card">
-  <header>
-    <h3>Movies</h3>
-    <span>Mean 7.4</span>
-  </header>
-
-  <div class="bar">
-    <span class="completed" style="width:90%"></span>
-    <span class="plan" style="width:10%"></span>
+    <!-- List Management -->
+    <div class="list-section">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>My List Management</h2>
+        <select id="filterType" onchange="renderListTable()">
+          <option value="all">All Types</option>
+          <option value="movies">Movies</option>
+          <option value="series">Series</option>
+          <option value="animes">Animes</option>
+          <option value="manga">Manga</option>
+          <option value="novels">Novels</option>
+          <option value="games">Games</option>
+        </select>
+      </div>
+      <div style="overflow-x:auto;">
+        <table id="listTable">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Score</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Items rendered here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <div class="stats">
-    <ul>
-    <li><i class="watching"></i>Watching <b>2</b></li>
-      <li><i class="completed"></i>Completed <b>91</b></li>
-      <li><i class="onhold"></i>On-Hold <b>2</b></li>
-      <li><i class="dropped"></i>Dropped <b>3</b></li>
-    </ul>
-    <ul>
-      <li>Total <b>19</b></li>
-    </ul>
-  </div>
-</div>
+  <div id="footer-container"></div>
 
+  <script>
+    const API_BASE = 'http://localhost:3000/api';
+    const token = localStorage.getItem('token');
+    let fullList = {}; // To store fetched data
 
-<!-- ========= SERIES ========= -->
-<div class="stats-card">
-  <header>
-    <h3>Series</h3>
-    <span>Mean 7.9</span>
-  </header>
+    if (!token) window.location.href = '../auth/login.html';
 
-  <div class="bar">
-    <span class="completed" style="width:71%"></span>
-    <span class="watching" style="width:15%"></span>
-    <span class="onhold" style="width:14%"></span>
-  </div>
+    // Load Components
+    fetch("/components/navbar.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navbar-container").innerHTML = html;
+        setupNavbarInteractions();
+      });
+    fetch("/components/footer.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("footer-container").innerHTML = html);
 
-  <div class="stats">
-    <ul>
-      <li><i class="watching"></i>Watching <b>2</b></li>
-      <li><i class="completed"></i>Completed <b>91</b></li>
-      <li><i class="onhold"></i>On-Hold <b>2</b></li>
-      <li><i class="dropped"></i>Dropped <b>3</b></li>
-    </ul>
-    <ul>
-      <li>Total <b>7</b></li>
-    </ul>
-  </div>
-</div>
+    // Navbar Interaction (Logout + Search Redirect)
+    function setupNavbarInteractions() {
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          window.location.href = '../auth/login.html';
+        });
+      }
+      // Bind search function for Dashboard (Redirect to home)
+      window.searchMedia = function () {
+        const type = document.getElementById('navSearchType').value;
+        const query = document.getElementById('navSearchQuery').value;
+        if (query) {
+          window.location.href = `../home.html?search_type=${type}&search_query=${encodeURIComponent(query)}`;
+        }
+      };
+    }
 
+    // Load Data
+    async function loadData() {
+      try {
+        const res = await fetch(`${API_BASE}/list`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        fullList = data;
 
+        renderCharts(data);
+        renderListTable();
+      } catch (e) {
+        console.error("Error loading data", e);
+      }
+    }
 
+    // Charts
+    let typeChartInstance = null;
+    let statusChartInstance = null;
 
-<!-- ========= ANIME ========= -->
-<div class="stats-card">
-  <header>
-    <h3>Anime</h3>
-    <span>Days 50.7 · Mean 7.8</span>
-  </header>
+    function renderCharts(data) {
+      // Prepare Data
+      const typeCounts = {};
+      const statusCounts = {};
 
-  <div class="bar">
-    <span class="completed" style="width:95%"></span>
-    <span class="onhold" style="width:3%"></span>
-    <span class="dropped" style="width:2%"></span>
-  </div>
+      Object.keys(data).forEach(type => {
+        // exclude favorites/progress keys if they exist, but user.json structure is structured by type mostly
+        if (!Array.isArray(data[type]) && typeof data[type] === 'object') {
+          // It's a category like "animes": { "watching": [], ... }
+          let typeCount = 0;
+          Object.keys(data[type]).forEach(status => {
+            const count = data[type][status].length;
+            typeCount += count;
 
-  <div class="stats">
-    <ul>
-      <li><i class="watching"></i>Watching <b>2</b></li>
-      <li><i class="completed"></i>Completed <b>91</b></li>
-      <li><i class="onhold"></i>On-Hold <b>2</b></li>
-      <li><i class="dropped"></i>Dropped <b>3</b></li>
-    </ul>
-    <ul>
-      <li>Total <b>96</b></li>
-      <li>Episodes <b>2992</b></li>
-    </ul>
-  </div>
-</div>
+            statusCounts[status] = (statusCounts[status] || 0) + count;
+          });
+          if (typeCount > 0) typeCounts[type] = typeCount;
+        }
+      });
 
-<!-- ========= MANGA ========= -->
-<div class="stats-card">
-  <header>
-    <h3>Manga</h3>
-    <span>Days 0.2 · Mean 0.0</span>
-  </header>
+      // Type Chart (Pie)
+      const ctxType = document.getElementById('typeChart').getContext('2d');
+      if (typeChartInstance) typeChartInstance.destroy();
+      typeChartInstance = new Chart(ctxType, {
+        type: 'pie',
+        data: {
+          labels: Object.keys(typeCounts).map(s => s.charAt(0).toUpperCase() + s.slice(1)),
+          datasets: [{
+            data: Object.values(typeCounts),
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+          }]
+        }
+      });
 
-  <div class="bar">
-    <span class="completed" style="width:60%"></span>
-    <span class="onhold" style="width:40%"></span>
-  </div>
+      // Status Chart (Bar)
+      const ctxStatus = document.getElementById('statusChart').getContext('2d');
+      if (statusChartInstance) statusChartInstance.destroy();
+      statusChartInstance = new Chart(ctxStatus, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(statusCounts).map(s => s.replace(/_/g, ' ')),
+          datasets: [{
+            label: 'Items by Status',
+            data: Object.values(statusCounts),
+            backgroundColor: '#36A2EB'
+          }]
+        }
+      });
+    }
 
-  <div class="stats">
-    <ul>
-      <li><i class="watching"></i>Reading <b>2</b></li>
-      <li><i class="completed"></i>Completed <b>3</b></li>
-      <li><i class="onhold"></i>On-Hold <b>2</b></li>
-      <li><i class="dropped"></i>Dropped <b>3</b></li>
-    </ul>
-    <ul>
-      <li>Total <b>5</b></li>
-      <li>Chapters <b>17</b></li>
-    </ul>
-  </div>
-</div>
+    // List Table
+    function renderListTable() {
+      const filter = document.getElementById('filterType').value;
+      const tbody = document.querySelector('#listTable tbody');
+      tbody.innerHTML = '';
 
-<!-- ========= COMICS ========= -->
-<div class="stats-card">
-  <header>
-    <h3>Comics</h3>
-    <span>Mean 7.2</span>
-  </header>
+      Object.keys(fullList).forEach(type => {
+        if (filter !== 'all' && type !== filter) return;
 
-  <div class="bar">
-    <span class="completed" style="width:67%"></span>
-    <span class="reading" style="width:17%"></span>
-    <span class="onhold" style="width:8%"></span>
-    <span class="dropped" style="width:8%"></span>
-  </div>
+        if (typeof fullList[type] === 'object') {
+          Object.keys(fullList[type]).forEach(status => {
+            fullList[type][status].forEach(item => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                                <td><img src="${item.image || '/assets/default_poster.jpg'}" style="width:40px;height:60px;object-fit:cover;"></td>
+                                <td>${item.title}</td>
+                                <td>${type}</td>
+                                <td>
+                                    <select id="status-${type}-${item.id}">
+                                        <option value="plan_to_watch" ${status.includes('plan') ? 'selected' : ''}>Plan to Watch/Read/Play</option>
+                                        <option value="watching" ${status === 'watching' || status === 'reading' || status === 'playing' ? 'selected' : ''}>Watching/Reading/Playing</option>
+                                        <option value="completed" ${status === 'completed' ? 'selected' : ''}>Completed</option>
+                                        <option value="on_hold" ${status === 'on_hold' ? 'selected' : ''}>On Hold</option>
+                                        <option value="dropped" ${status === 'dropped' ? 'selected' : ''}>Dropped</option>
+                                    </select>
+                                </td>
+                                <td><input type="number" id="score-${type}-${item.id}" value="${item.score || 0}" min="0" max="10" style="width:50px;"></td>
+                                <td>
+                                    <button class="action-btn btn-save" onclick="updateItem('${type}', '${item.id}')"><i class="fa fa-save"></i></button>
+                                    <button class="action-btn btn-delete" onclick="deleteItem('${type}', '${item.id}')"><i class="fa fa-trash"></i></button>
+                                </td>
+                            `;
+              tbody.appendChild(tr);
+            });
+          });
+        }
+      });
+    }
 
-  <div class="stats">
-    <ul>
-     <li><i class="watching"></i>Reading <b>2</b></li>
-      <li><i class="completed"></i>Completed <b>3</b></li>
-      <li><i class="onhold"></i>On-Hold <b>2</b></li>
-      <li><i class="dropped"></i>Dropped <b>3</b></li>
-    </ul>
-    <ul>
-      <li>Total <b>12</b></li>
-    </ul>
-  </div>
-</div>
+    // Actions
+    async function updateItem(type, id) {
+      const status = document.getElementById(`status-${type}-${id}`).value;
+      const score = document.getElementById(`score-${type}-${id}`).value;
 
-<!-- ========= NOVELS ========= -->
-<div class="stats-card">
-  <header>
-    <h3>Novels</h3>
-    <span>Mean 7.0</span>
-  </header>
+      // Mapping simple status to category specific if needed
+      // Backend handles generic 'watching' -> 'reading' for manga? user.json structure has distinct arrays?
+      // Actually user.json has 'watching', 'completed', 'plan_to_watch' etc for Anime.
+      // For Manga it has 'reading', 'completed', 'plan_to_read'.
+      // The dropdown needs to be smart or the backend list.js needs to handle mapping.
+      // Let's rely on backend list.js:
+      /*
+          // list.js PUT /:type/:id
+          // It just updates the item in the list. It blindly moves it.
+          // WE NEED TO SEND THE CORRECT STATUS STRING.
+      */
+      let finalStatus = status;
+      if (['manga', 'novels'].includes(type)) {
+        if (status === 'watching') finalStatus = 'reading';
+        if (status === 'plan_to_watch') finalStatus = 'plan_to_read';
+      } else if (type === 'games') {
+        if (status === 'watching') finalStatus = 'playing';
+        if (status === 'plan_to_watch') finalStatus = 'plan_to_play';
+      }
 
-  <div class="bar">
-    <span class="completed" style="width:50%"></span>
-    <span class="reading" style="width:25%"></span>
-    <span class="onhold" style="width:12%"></span>
-    <span class="dropped" style="width:13%"></span>
-  </div>
+      try {
+        const res = await fetch(`${API_BASE}/list/${type}/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ status: finalStatus, score: score })
+        });
+        if (res.ok) {
+          alert('Updated!');
+          loadData();
+        } else {
+          alert('Update failed');
+        }
+      } catch (e) { console.error(e); }
+    }
 
-  <div class="stats">
-    <ul>
-        <li><i class="watching"></i>Reading <b>2</b></li>
-      <li><i class="completed"></i>Completed <b>3</b></li>
-      <li><i class="onhold"></i>On-Hold <b>2</b></li>
-      <li><i class="dropped"></i>Dropped <b>3</b></li>
-    </ul>
-    <ul>
-      <li>Total <b>8</b></li>
-    </ul>
-  </div>
-</div>
+    async function deleteItem(type, id) {
+      if (!confirm("Are you sure?")) return;
+      try {
+        const res = await fetch(`${API_BASE}/list/${type}/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        if (res.ok) {
+          loadData();
+        } else {
+          alert('Delete failed');
+        }
+      } catch (e) { console.error(e); }
+    }
 
-<!-- ========= GAMES ========= -->
-<div class="stats-card">
-  <header>
-    <h3>Games</h3>
-    <span>Mean 8.1</span>
-  </header>
+    // Init
+    loadData();
 
-  <div class="bar">
-    <span class="completed" style="width:64%"></span>
-    <span class="playing" style="width:22%"></span>
-    <span class="onhold" style="width:7%"></span>
-    <span class="dropped" style="width:7%"></span>
-  </div>
-
-  <div class="stats">
-    <ul>
-      
-      <li><i class="playing"></i>Playing <b>3</b></li>
-       <li><i class="completed"></i>Completed <b>3</b></li>
-      <li><i class="onhold"></i>On-Hold <b>2</b></li>
-      <li><i class="dropped"></i>Dropped <b>3</b></li>
-    </ul>
-    <ul>
-      <li>Total <b>14</b></li>
-    </ul>
-  </div>
-</div>
-
-
-
-<!-- ================= LIST VIEW (HIDDEN) ================= -->
-<div id="list-view" style="display:none;">
-  <iframe
-    id="list-frame"
-    style="width:100%; height:85vh; border:none;">
-  </iframe>
-</div>
-
-</section>
-
-
-</main>
-
-
-<script>
-fetch("/components/navbar.html")
-  .then(res => res.text())
-  .then(html => {
-    document.getElementById("navbar-container").innerHTML = html;
-  });
-</script>
-
-<script>
-fetch("/components/footer.html")
-  .then(res => res.text())
-  .then(html => {
-    document.getElementById("footer-container").innerHTML = html;
-  });
-</script>
-
-<script>
-function openList(event, category) {
-  event.preventDefault();
-
-  // hide all dashboard stats cards
-  document
-    .querySelectorAll(".stats-card")
-    .forEach(card => card.style.display = "none");
-
-  // show list view
-  document.getElementById("list-view").style.display = "block";
-
-  // load list
-  document.getElementById("list-frame").src =
-    "MyList.html?category=" + category;
-}
-
-
-
-
-</script>
-<script>
-function showDashboard() {
-  // show all stats cards again
-  document
-    .querySelectorAll(".stats-card")
-    .forEach(card => card.style.display = "block");
-
-  // hide list
-  document.getElementById("list-view").style.display = "none";
-
-  // reset iframe
-  document.getElementById("list-frame").src = "";
-}
-</script>
-
-
-<div id="footer-container"></div>
-
+  </script>
 </body>
+
 </html>
