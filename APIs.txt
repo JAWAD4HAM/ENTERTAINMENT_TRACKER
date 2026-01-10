@@ -1,7 +1,0 @@
-Books ->Goodreads API
-Novels->
-manga->MyAnimeList API
-comics->
-anime->MyAnimeList API
-movies->TMDB API
-series->TMDB API
