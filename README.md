@@ -49,16 +49,19 @@ Follow these steps to run the project locally:
 1.  **Prerequisites**: Ensure you have [Node.js](https://nodejs.org/) installed on your machine.
 2.  **Clone the Repository**:
     ```bash
-    git clone https://github.com/yourusername/entertainment-tracker.git
-    cd entertainment-tracker
+    git clone https://github.com/JAWAD4HAM/entertainment-tracker.git
+    cd ENTERTAINMENT_TRACKER
     ```
 3.  **Install Dependencies**:
     ```bash
     npm install
     ```
 4.  **Configuration**:
-    *   Create a `.env` file in the root directory.
-    *   Add your API keys (TMDB, RAWG) and a JWT Secret:
+    *   Create a `.env` file in the root directory (or copy from `.env.example`):
+        ```bash
+        cp .env.example .env
+        ```
+    *   Edit `.env` and add your API keys (TMDB, RAWG) and a JWT Secret:
         ```env
         PORT=3000
         JWT_SECRET=your_super_secret_key
@@ -67,9 +70,19 @@ Follow these steps to run the project locally:
         ```
 5.  **Start the Server**:
     ```bash
-    node server.js
+    npm start
     ```
 6.  **Access the App**: Open your browser and navigate to `http://localhost:3000`.
+
+### 🌐 Deployment
+
+Ready to deploy your Entertainment Tracker? Check out our comprehensive **[Deployment Guide](DEPLOYMENT.md)** for detailed instructions on deploying to:
+
+*   **Docker** (recommended for easy setup)
+*   **Cloud Platforms** (Render, Railway, Heroku, DigitalOcean)
+*   **VPS/Self-Hosted** (full control with Nginx, PM2, SSL)
+
+The deployment guide includes step-by-step instructions, troubleshooting tips, and security best practices.
 
 ## 📂 Project Structure
 
