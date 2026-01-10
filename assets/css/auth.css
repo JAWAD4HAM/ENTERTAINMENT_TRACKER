@@ -1,0 +1,164 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+:root {
+  --bg: #f6f3ee;
+  --panel: #fffdf8;
+  --ink: #1e2a33;
+  --muted: #5c6a75;
+  --brand: #ff6b3d;
+  --brand-2: #0f766e;
+  --stroke: rgba(30, 42, 51, 0.12);
+  --shadow: 0 20px 50px rgba(30, 42, 51, 0.16);
+  --radius-lg: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 15% 10%, #fff4e7 0%, var(--bg) 45%, #eef2f4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20% 0 0 -20%;
+  background:
+    radial-gradient(circle at 80% 10%, rgba(255, 107, 61, 0.18), transparent 45%),
+    radial-gradient(circle at 15% 80%, rgba(15, 118, 110, 0.12), transparent 50%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.auth-shell {
+  width: 100%;
+  max-width: 420px;
+  display: grid;
+  gap: 16px;
+}
+
+form {
+  background: var(--panel);
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 14px;
+  animation: panelFade 0.7s ease both;
+}
+
+form h1,
+form h2 {
+  font-family: "Fraunces", "Times New Roman", serif;
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+
+.auth-subtitle {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
+  background: #fff;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+input:focus {
+  outline: none;
+  border-color: rgba(255, 107, 61, 0.6);
+  box-shadow: 0 0 0 3px rgba(255, 107, 61, 0.15);
+}
+
+button {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: var(--brand);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 12px 24px rgba(255, 107, 61, 0.3);
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 30px rgba(255, 107, 61, 0.35);
+}
+
+.extras {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.extras input[type="checkbox"] {
+  width: auto;
+  margin-right: 6px;
+}
+
+.extras a {
+  color: var(--brand-2);
+  text-decoration: none;
+}
+
+.extras a:hover {
+  color: var(--brand);
+}
+
+.auth-link {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.auth-link a {
+  color: var(--brand-2);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-link a:hover {
+  color: var(--brand);
+}
+
+@keyframes panelFade {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail View</title>
 
     <!-- Global CSS -->
@@ -9,44 +10,6 @@
     <link rel="stylesheet" href="/assets/css/navbar.css">
     <link rel="stylesheet" href="/assets/css/footer.css">
 
-    <style>
-        .detail-container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px;
-            font-size: 16px;
-        }
-        .detail-header {
-            display: flex;
-            gap: 20px;
-        }
-        .detail-header img {
-            width: 240px;
-            height: 340px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-        .detail-info {
-            flex: 1;
-        }
-        .detail-info h2 {
-            margin-top: 0;
-        }
-        .button-group {
-            margin-top: 16px;
-        }
-        .button-group select,
-        .button-group button {
-            margin-right: 8px;
-            padding: 8px 12px;
-            font-size: 0.9rem;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-status { background: #2e51a2; color: white; }
-        .btn-fav { background: #eab308; color: white; }
-    </style>
 </head>
 
 <body>
@@ -60,26 +23,20 @@
             <h2 id="detail-title"></h2>
             <p id="detail-desc"></p>
 
-            <div id="detail-extra"></div>
+            <div id="detail-extra" class="detail-extra"></div>
 
-            <div class="button-group">
-                <select id="status-select">
-                    <option value="">Choose Status</option>
-                </select>
-
-                <button class="btn-status" id="btn-update-status">Update Status</button>
-                <button class="btn-fav" id="btn-favorite">Add to Favorites</button>
-            </div>
         </div>
     </div>
 </div>
 
 <div id="footer-container"></div>
 
+<script src="/assets/js/app.js"></script>
 <script>
     /* Load navbar & footer */
     fetch("/components/navbar.html").then(r => r.text()).then(html => {
         document.getElementById("navbar-container").innerHTML = html;
+        if (window.setupNavbarInteractions) window.setupNavbarInteractions();
     });
     fetch("/components/footer.html").then(r => r.text()).then(html => {
         document.getElementById("footer-container").innerHTML = html;
@@ -87,109 +44,112 @@
 
     /* Read parameters */
     const params = new URLSearchParams(window.location.search);
-    const category = params.get("category");
+    const category = params.get("type") || params.get("category");
     const id = params.get("id");
 
     /* Validate */
     if (!category || !id) {
-        document.querySelector(".detail-container").innerHTML = "<p>No item selected</p>";
+        document.querySelector(".detail-container").innerHTML = "<p>No item selected.</p>";
     } else {
-        fetchItem();
+        loadFromSession();
     }
 
-    function fetchItem() {
-        fetch(`/api/v1/media?category=${category}&id=${id}`)
-            .then(res => res.json())
-            .then(item => {
-                renderDetail(item);
-                setupStatusOptions(item.category);
-            })
-            .catch(err => {
-                console.error(err);
-                document.querySelector(".detail-container").innerHTML = "<p>Error loading item.</p>";
-            });
+    function loadFromSession() {
+        const key = `media:${category}:${id}`;
+        let item = null;
+        try {
+            item = JSON.parse(sessionStorage.getItem(key));
+        } catch (err) {
+            item = null;
+        }
+
+        if (!item) {
+            document.querySelector(".detail-container").innerHTML = "<p>Details unavailable. Open this page from Home or My List.</p>";
+            return;
+        }
+
+        renderDetail(item);
     }
 
     function renderDetail(item) {
-        document.getElementById("detail-image").src = item.image || "";
-        document.getElementById("detail-title").textContent = item.title || "";
-        document.getElementById("detail-desc").textContent = item.description || "";
+        const image = item.image || "/assets/default_poster.jpg";
+        document.getElementById("detail-image").src = image;
+        document.getElementById("detail-title").textContent = item.title || item.name || "Untitled";
+        document.getElementById("detail-desc").textContent = item.description || "No description available yet.";
 
         const extra = document.getElementById("detail-extra");
-        extra.innerHTML = "";
-
-        if (item.category === "movies" || item.category === "series") {
-            extra.innerHTML += `<p><strong>Score:</strong> ${item.score || "N/A"}</p>`;
-        }
-        if (item.category === "anime") {
-            extra.innerHTML += `<p><strong>Episodes:</strong> ${item.episodes || "N/A"}</p>`;
-            extra.innerHTML += `<p><strong>Score:</strong> ${item.score || "N/A"}</p>`;
-        }
+        const typeLabel = formatType(item._type || category);
+        const extraRows = buildMetaRows(item, typeLabel);
+        extra.innerHTML = extraRows.length ? extraRows.join("") : "<p>No extra details available.</p>";
     }
 
-    function setupStatusOptions(cat) {
-        const statusSelect = document.getElementById("status-select");
-        statusSelect.innerHTML = `<option value="">Choose Status</option>`;
-        let options = [];
+    function buildMetaRows(item, typeLabel) {
+        const rows = [
+            { label: "Type", value: typeLabel },
+            { label: "Score", value: item.score },
+            { label: "Release Date", value: formatDate(item.release_date) },
+            { label: "First Air Date", value: formatDate(item.first_air_date) },
+            { label: "Released", value: formatDate(item.released) },
+            { label: "Start Date", value: formatDate(item.start_date) },
+            { label: "End Date", value: formatDate(item.end_date) },
+            { label: "Year", value: item.year },
+            { label: "Status", value: item.status },
+            { label: "Media Type", value: item.media_type },
+            { label: "Episodes", value: item.episodes },
+            { label: "Chapters", value: item.chapters },
+            { label: "Volumes", value: item.volumes },
+            { label: "Rating", value: item.rating },
+            { label: "Members", value: item.members },
+            { label: "Metacritic", value: item.metacritic },
+            { label: "Popularity", value: item.popularity },
+            { label: "Vote Count", value: item.vote_count },
+            { label: "Ratings Count", value: item.ratings_count },
+            { label: "Original Language", value: item.original_language },
+            { label: "Genres", value: formatList(item.genres) },
+            { label: "Platforms", value: formatList(item.platforms) },
+            { label: "Added", value: formatDate(item.added_at) },
+            { label: "Progress", value: item.progress }
+        ];
 
-        switch (cat) {
-            case "anime":
-                options = ["Watching","Completed","On-Hold","Dropped","Plan to Watch"];
-                break;
-            case "manga":
-            case "comics":
-            case "novels":
-                options = ["Reading","Completed","On-Hold","Dropped","Plan to Read"];
-                break;
-            case "games":
-                options = ["Playing","Completed","On-Hold","Dropped","Plan to Play"];
-                break;
-            case "movies":  // Your custom statuses
-                options = ["Watching","Completed","On-Hold","Dropped","Plan to Watch"];
-                break;
-            case "series":
-                options = ["Watching","Completed","On-Hold","Dropped","Plan to Watch"];
-                break;
-        }
-
-        options.forEach(opt => {
-            const el = document.createElement("option");
-            el.value = opt;
-            el.textContent = opt;
-            statusSelect.appendChild(el);
-        });
+        return rows
+            .filter(row => isValuePresent(row.value))
+            .map(row => `<p><strong>${row.label}:</strong> ${row.value}</p>`);
     }
 
-    /* Update status */
-    document.getElementById("btn-update-status").addEventListener("click", () => {
-        const status = document.getElementById("status-select").value;
-        if (!status) return alert("Choose a status.");
+    function formatDate(value) {
+        if (!value) return null;
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return value;
+        return date.toLocaleDateString();
+    }
 
-        updateField("status", status);
-    });
+    function formatList(values) {
+        if (!Array.isArray(values) || values.length === 0) return null;
+        return values.join(", ");
+    }
 
-    /* Add to favorites */
-    document.getElementById("btn-favorite").addEventListener("click", () => {
-        updateField("favorite", true);
-    });
+    function isValuePresent(value) {
+        if (value === null || value === undefined) return false;
+        if (typeof value === "string") return value.trim().length > 0;
+        if (Array.isArray(value)) return value.length > 0;
+        return true;
+    }
 
-    function updateField(field, value) {
-        fetch("/api/v1/media/update", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                category,
-                id: parseInt(id),
-                field,
-                value
-            })
-        })
-        .then(res => {
-            if (!res.ok) throw new Error("Update failed");
-            return res.json();
-        })
-        .then(resp => alert("Update successful"))
-        .catch(err => alert("Error updating"));
+    function formatType(rawType) {
+        const map = {
+            movies: "Movie",
+            movie: "Movie",
+            series: "Series",
+            animes: "Anime",
+            anime: "Anime",
+            manga: "Manga",
+            novels: "Novel",
+            novel: "Novel",
+            games: "Game",
+            game: "Game"
+        };
+
+        return map[rawType] || rawType;
     }
 </script>
 

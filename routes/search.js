@@ -48,7 +48,17 @@ router.get('/:type', async (req, res) => {
                 image: item.images.jpg.image_url,
                 description: item.synopsis,
                 type: type, // anime, manga, novel
-                score: item.score
+                score: item.score,
+                media_type: item.type,
+                status: item.status,
+                year: item.year,
+                episodes: item.episodes,
+                chapters: item.chapters,
+                volumes: item.volumes,
+                rating: item.rating,
+                members: item.members,
+                start_date: item.aired?.from || item.published?.from || null,
+                end_date: item.aired?.to || item.published?.to || null
             }));
 
 
@@ -74,7 +84,12 @@ router.get('/:type', async (req, res) => {
                 image: item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : null,
                 description: item.overview,
                 type: type,
-                score: item.vote_average
+                score: item.vote_average,
+                release_date: item.release_date,
+                first_air_date: item.first_air_date,
+                original_language: item.original_language,
+                popularity: item.popularity,
+                vote_count: item.vote_count
             }));
 
         } else if (type === 'game') {
@@ -92,7 +107,12 @@ router.get('/:type', async (req, res) => {
                 image: item.background_image,
                 description: null, // RAWG search listing often lacks description, need details call for that
                 type: 'game',
-                score: item.rating // or metacritic
+                score: item.rating, // or metacritic
+                released: item.released,
+                metacritic: item.metacritic,
+                ratings_count: item.ratings_count,
+                genres: item.genres?.map(genre => genre.name) || [],
+                platforms: item.platforms?.map(platform => platform.platform?.name).filter(Boolean) || []
             }));
         } else {
             return res.status(400).json({ message: 'Invalid type' });
@@ -135,7 +155,12 @@ router.get('/trending/:type', async (req, res) => {
                 image: item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : null,
                 description: item.overview,
                 type: type,
-                score: item.vote_average
+                score: item.vote_average,
+                release_date: item.release_date,
+                first_air_date: item.first_air_date,
+                original_language: item.original_language,
+                popularity: item.popularity,
+                vote_count: item.vote_count
             }));
 
         } else if (type === 'anime') {
@@ -147,7 +172,15 @@ router.get('/trending/:type', async (req, res) => {
                 image: item.images.jpg.image_url,
                 description: item.synopsis,
                 type: 'anime',
-                score: item.score
+                score: item.score,
+                media_type: item.type,
+                status: item.status,
+                year: item.year,
+                episodes: item.episodes,
+                rating: item.rating,
+                members: item.members,
+                start_date: item.aired?.from || null,
+                end_date: item.aired?.to || null
             }));
 
         } else if (type === 'manga' || type === 'novel') {
@@ -167,7 +200,15 @@ router.get('/trending/:type', async (req, res) => {
                 image: item.images.jpg.image_url,
                 description: item.synopsis,
                 type: type,
-                score: item.score
+                score: item.score,
+                media_type: item.type,
+                status: item.status,
+                year: item.year,
+                chapters: item.chapters,
+                volumes: item.volumes,
+                members: item.members,
+                start_date: item.published?.from || null,
+                end_date: item.published?.to || null
             }));
 
         } else if (type === 'game') {
@@ -186,7 +227,12 @@ router.get('/trending/:type', async (req, res) => {
                 image: item.background_image,
                 description: null,
                 type: 'game',
-                score: item.rating
+                score: item.rating,
+                released: item.released,
+                metacritic: item.metacritic,
+                ratings_count: item.ratings_count,
+                genres: item.genres?.map(genre => genre.name) || [],
+                platforms: item.platforms?.map(platform => platform.platform?.name).filter(Boolean) || []
             }));
         }
 
@@ -200,4 +246,3 @@ router.get('/trending/:type', async (req, res) => {
 });
 
 module.exports = router;
-

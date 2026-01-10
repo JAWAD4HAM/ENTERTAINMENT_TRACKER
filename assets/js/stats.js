@@ -1,6 +1,11 @@
 // API_BASE and token are provided by app.js
 
 
+function getThemeColor(name, fallback) {
+    const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    return value || fallback;
+}
+
 async function loadStats() {
     try {
         const res = await fetch(`${API_BASE}/list`, {
@@ -65,6 +70,8 @@ function processData(data) {
 
 function renderTypeChart(data) {
     const ctx = document.getElementById('typeChart').getContext('2d');
+    const textColor = getThemeColor('--ink', '#1e2a33');
+    const mutedColor = getThemeColor('--muted', '#5c6a75');
 
     // Generate colors based on keys to ensure consistency
     const bgColors = Object.keys(data).map(key => typeColors[key] || '#cccccc');
@@ -82,7 +89,11 @@ function renderTypeChart(data) {
         options: {
             responsive: true,
             plugins: {
-                legend: { position: 'bottom', labels: { color: 'white' } }
+                legend: { position: 'bottom', labels: { color: textColor } }
+            },
+            scales: {
+                x: { ticks: { color: mutedColor } },
+                y: { ticks: { color: mutedColor } }
             }
         }
     });
@@ -90,6 +101,8 @@ function renderTypeChart(data) {
 
 function renderStatusChart(statusTypeCounts, allStatuses) {
     const ctx = document.getElementById('statusChart').getContext('2d');
+    const textColor = getThemeColor('--ink', '#1e2a33');
+    const mutedColor = getThemeColor('--muted', '#5c6a75');
 
     // 1. Prepare Labels (X-Axis)
     const labels = allStatuses.map(s => s.replace(/_/g, ' ').toUpperCase());
@@ -122,18 +135,18 @@ function renderStatusChart(statusTypeCounts, allStatuses) {
             scales: {
                 x: {
                     stacked: true,
-                    ticks: { color: 'white' }
+                    ticks: { color: mutedColor }
                 },
                 y: {
                     stacked: true,
                     beginAtZero: true,
-                    ticks: { color: 'white' }
+                    ticks: { color: mutedColor }
                 }
             },
             plugins: {
                 legend: {
                     display: true, // Show legend so user knows which color is which type
-                    labels: { color: 'white' }
+                    labels: { color: textColor }
                 },
                 title: { display: false }
             }

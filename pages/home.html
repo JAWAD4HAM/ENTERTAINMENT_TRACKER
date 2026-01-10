@@ -130,6 +130,8 @@
           { id: 'games', title: 'Games' }
         ];
 
+        const loads = [];
+
         for (const sec of sections) {
           const headers = Array.from(document.querySelectorAll('.section-header h2'));
           const header = headers.find(h => h.innerText.toLowerCase().includes(sec.title.toLowerCase()));
@@ -145,9 +147,11 @@
             header.innerText = `${sec.title} (Global Trending)`;
 
             // Load Trending
-            await loadTrending(sec.id, `row-${sec.id}`);
+            loads.push(loadTrending(sec.id, `row-${sec.id}`));
           }
         }
+
+        await Promise.all(loads);
 
       } catch (e) {
         console.error('Error loading dashboard:', e);
