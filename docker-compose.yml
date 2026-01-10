@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  entertainment-tracker:
+    build: .
+    container_name: entertainment-tracker
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - PORT=${PORT:-3000}
+      - JWT_SECRET=${JWT_SECRET}
+      - TMDB_API_KEY=${TMDB_API_KEY}
+      - RAWG_API_KEY=${RAWG_API_KEY}
+    volumes:
+      # Mount storage directory to persist data
+      - ./storage:/app/storage
+    restart: unless-stopped
