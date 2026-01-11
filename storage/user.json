@@ -697,6 +697,142 @@
         "novels": {},
         "games": {}
       }
+    },
+    {
+      "id": 1768132982068,
+      "username": "comekeda@mailinator.com",
+      "email": "comekeda@mailinator.com",
+      "password_hash": "$2a$10$8htQizurosmo5JMbgP4O.ueGfIT4uAkbO9PAnbDvp2SbsQHQj5KR6",
+      "created_at": "2026-01-11T12:03:02.068Z",
+      "profile_picture": "/assets/default_profile.png",
+      "lists": {
+        "movies": {
+          "watching": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_watch": []
+        },
+        "series": {
+          "watching": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_watch": []
+        },
+        "animes": {
+          "watching": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_watch": []
+        },
+        "manga": {
+          "reading": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_read": []
+        },
+        "novels": {
+          "reading": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_read": []
+        },
+        "games": {
+          "playing": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_play": []
+        }
+      },
+      "favorites": {
+        "movies": [],
+        "series": [],
+        "animes": [],
+        "manga": [],
+        "novels": [],
+        "games": []
+      },
+      "progress": {
+        "movies": {},
+        "series": {},
+        "animes": {},
+        "manga": {},
+        "novels": {},
+        "games": {}
+      }
+    },
+    {
+      "id": 1768133765483,
+      "username": "tixydigon",
+      "email": "noxowu@mailinator.com",
+      "password_hash": "$2a$10$gZqKuhWnKcxR1KhO3CxRQuAgjcJ4SAT8LA/1qsZpRkQncC9oU5US6",
+      "created_at": "2026-01-11T12:16:05.483Z",
+      "profile_picture": "/assets/default_profile.png",
+      "lists": {
+        "movies": {
+          "watching": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_watch": []
+        },
+        "series": {
+          "watching": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_watch": []
+        },
+        "animes": {
+          "watching": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_watch": []
+        },
+        "manga": {
+          "reading": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_read": []
+        },
+        "novels": {
+          "reading": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_read": []
+        },
+        "games": {
+          "playing": [],
+          "completed": [],
+          "on_hold": [],
+          "dropped": [],
+          "plan_to_play": []
+        }
+      },
+      "favorites": {
+        "movies": [],
+        "series": [],
+        "animes": [],
+        "manga": [],
+        "novels": [],
+        "games": []
+      },
+      "progress": {
+        "movies": {},
+        "series": {},
+        "animes": {},
+        "manga": {},
+        "novels": {},
+        "games": {}
+      }
     }
   ]
 }
