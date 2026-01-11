@@ -113,9 +113,22 @@ window.createMediaCard = function (item, type, isUserList = false, status = null
   let imageSrc = item.image;
   if (!imageSrc || imageSrc === 'null') imageSrc = '/assets/default_poster.jpg';
 
+  // Normalize type for details link
+  let detailType = type;
+  if (type === 'movies') detailType = 'movie';
+  if (type === 'animes') detailType = 'anime';
+  if (type === 'series') detailType = 'series'; // stays series
+  if (type === 'games') detailType = 'game';
+  if (type === 'novels') detailType = 'novel';
+  // manga is usually 'manga'
+
+  const detailUrl = `/pages/categories/details.html?type=${detailType}&id=${item.id}`;
+
   card.innerHTML = `
-        <img src="${imageSrc}" alt="${item.title}" style="width:100%; height:225px; object-fit:cover;">
-        <h4 style="font-size: 0.9em; margin: 5px 0;">${item.title}</h4>
+        <a href="${detailUrl}" style="text-decoration: none; color: inherit; display: block;">
+            <img src="${imageSrc}" alt="${item.title}" style="width:100%; height:225px; object-fit:cover; border-radius: 8px;">
+            <h4 style="font-size: 0.9em; margin: 5px 0;">${item.title}</h4>
+        </a>
         ${isUserList ? `<span class="status-badge" style="font-size:0.7em;">${status.replace(/_/g, ' ')}</span>` : ''}
         <div class="actions" style="margin-top: 5px;">
             ${!isUserList ?
@@ -221,6 +234,39 @@ window.deleteItem = async function (type, id) {
       alert('Failed to delete');
     }
   } catch (e) { console.error(e); }
+};
+
+// Update Item
+window.updateItem = async function (type, id, data) {
+  try {
+    const res = await fetch(`${API_BASE}/list/${type}/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (res.status === 401) {
+      window.location.href = '/pages/auth/login.html';
+      return;
+    }
+
+    if (res.ok) {
+      alert('Updated successfully!');
+      // Reload if on details page or dashboard
+      if (window.location.pathname.includes('details.html')) {
+        window.location.reload();
+      }
+    } else {
+      const err = await res.json();
+      alert(err.message || 'Update failed');
+    }
+  } catch (e) {
+    console.error(e);
+    alert('Error updating item');
+  }
 };
 
 // Trending Loader (Shared)

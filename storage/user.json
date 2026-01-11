@@ -65,7 +65,26 @@
           "completed": [],
           "on_hold": [],
           "dropped": [],
-          "plan_to_watch": []
+          "plan_to_watch": [
+            {
+              "id": 1368166,
+              "title": "The Housemaid",
+              "image": "https://image.tmdb.org/t/p/w500/cWsBscZzwu5brg9YjNkGewRUvJX.jpg",
+              "backdrop": "https://image.tmdb.org/t/p/original/sK3z0Naed3H1Wuh7a21YRVMxYqt.jpg",
+              "description": "Trying to escape her past, Millie Calloway accepts a job as a live-in housemaid for the wealthy Nina and Andrew Winchester. But what begins as a dream job quickly unravels into something far more dangerous—a sexy, seductive game of secrets, scandal, and power.",
+              "type": "movie",
+              "score": 7.2,
+              "status": "Released",
+              "release_date": "2025-12-18",
+              "runtime": 131,
+              "genres": [
+                "Mystery",
+                "Thriller"
+              ],
+              "tagline": "Discover what lies behind closed doors.",
+              "added_at": "2026-01-11T10:52:56.041Z"
+            }
+          ]
         },
         "series": {
           "watching": [],

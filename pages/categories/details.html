@@ -1,157 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail View</title>
-
-    <!-- Global CSS -->
+    <title>Details | Entertainment Tracker</title>
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/navbar.css">
     <link rel="stylesheet" href="/assets/css/footer.css">
+    <style>
+        .details-hero {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            margin-bottom: -100px;
+            /* Overlap effect */
+        }
 
+        .details-hero::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), var(--bg-color));
+        }
+
+        .details-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 40px;
+        }
+
+        .poster-wrapper {
+            flex-shrink: 0;
+            width: 300px;
+        }
+
+        .poster-wrapper img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-wrapper {
+            flex-grow: 1;
+            padding-top: 120px;
+            /* Push down to align with overlap */
+        }
+
+        .info-header h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .meta-badges {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-actions {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .action-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        .synopsis {
+            line-height: 1.6;
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #ddd;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .data-item strong {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .details-content {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .info-wrapper {
+                padding-top: 0;
+                text-align: center;
+            }
+
+            .meta-badges {
+                justify-content: center;
+            }
+
+            .user-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div id="navbar-container"></div>
+    <div id="navbar-container"></div>
 
-<div class="detail-container">
-    <div class="detail-header">
-        <img id="detail-image" src="" alt="Cover">
-        <div class="detail-info">
-            <h2 id="detail-title"></h2>
-            <p id="detail-desc"></p>
+    <div id="loading" style="text-align: center; padding: 100px;">Loading details...</div>
 
-            <div id="detail-extra" class="detail-extra"></div>
+    <div id="main-content" style="display: none;">
+        <div class="details-hero" id="hero-bg"></div>
 
+        <div class="details-content">
+            <div class="poster-wrapper">
+                <img id="poster-img" src="" alt="Poster">
+            </div>
+
+            <div class="info-wrapper">
+                <div class="info-header">
+                    <h1 id="title">Loading...</h1>
+                    <div class="meta-badges" id="badges"></div>
+                </div>
+
+                <div class="user-actions" id="action-panel">
+                    <!-- Injected via JS -->
+                </div>
+
+                <div class="synopsis">
+                    <h3>Synopsis</h3>
+                    <p id="description"></p>
+                </div>
+
+                <div class="data-grid" id="data-grid">
+                    <!-- Extra Data -->
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="footer-container"></div>
+    <div class="container">
+        <!-- Footer spacer -->
+        <div style="height: 50px;"></div>
+    </div>
 
-<script src="/assets/js/app.js"></script>
-<script>
-    /* Load navbar & footer */
-    fetch("/components/navbar.html").then(r => r.text()).then(html => {
-        document.getElementById("navbar-container").innerHTML = html;
-        if (window.setupNavbarInteractions) window.setupNavbarInteractions();
-    });
-    fetch("/components/footer.html").then(r => r.text()).then(html => {
-        document.getElementById("footer-container").innerHTML = html;
-    });
+    <div id="footer-container"></div>
 
-    /* Read parameters */
-    const params = new URLSearchParams(window.location.search);
-    const category = params.get("type") || params.get("category");
-    const id = params.get("id");
+    <script src="/assets/js/app.js"></script>
+    <script>
+        // Load Components
+        fetch("/components/navbar.html").then(r => r.text()).then(h => {
+            document.getElementById("navbar-container").innerHTML = h;
+            if (window.setupNavbarInteractions) window.setupNavbarInteractions();
+        });
+        fetch("/components/footer.html").then(r => r.text()).then(h => document.getElementById("footer-container").innerHTML = h);
 
-    /* Validate */
-    if (!category || !id) {
-        document.querySelector(".detail-container").innerHTML = "<p>No item selected.</p>";
-    } else {
-        loadFromSession();
-    }
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type');
+        const id = params.get('id');
+        let currentItem = null;
+        let userListEntry = null;
 
-    function loadFromSession() {
-        const key = `media:${category}:${id}`;
-        let item = null;
-        try {
-            item = JSON.parse(sessionStorage.getItem(key));
-        } catch (err) {
-            item = null;
+        async function init() {
+            if (!type || !id) {
+                document.body.innerHTML = "<h1 style='text-align:center; margin-top:100px;'>Invalid Parameters</h1>";
+                return;
+            }
+
+            try {
+                // 1. Fetch Details
+                const res = await fetch(`${API_BASE}/search/details/${type}/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) throw new Error('Failed to load details');
+
+                currentItem = await res.json();
+
+                // 2. Fetch User List to check status
+                await checkUserList();
+
+                // 3. Render
+                render();
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('loading').innerText = "Error loading details.";
+            }
         }
 
-        if (!item) {
-            document.querySelector(".detail-container").innerHTML = "<p>Details unavailable. Open this page from Home or My List.</p>";
-            return;
+        async function checkUserList() {
+            try {
+                // API does not have a direct "check item" endpoint, so we fetch the list for this type
+                // Optimization: create a specific endpoint later, but for now fetch list
+                // Mapping type to list key
+                let listKey = type;
+                if (type === 'anime') listKey = 'animes';
+                if (type === 'movie') listKey = 'movies';
+                if (type === 'series') listKey = 'series'; // series -> series
+                if (type === 'manga') listKey = 'manga';
+                if (type === 'novel') listKey = 'novels';
+                if (type === 'game') listType = 'games'; // Note: Variable name error in original logic, fixing here: listKey
+
+                // Fix variable name for game
+                if (type === 'game') listKey = 'games';
+
+                const res = await fetch(`${API_BASE}/list`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    // data is object of lists { movies: {...}, animes: {...} }
+                    const correctList = data[listKey];
+
+                    if (correctList) {
+                        // Search in all statuses
+                        for (const status in correctList) {
+                            const found = correctList[status].find(i => i.id == id);
+                            if (found) {
+                                userListEntry = { ...found, status: status }; // Keep track of status
+                                break;
+                            }
+                        }
+                    }
+                }
+            } catch (e) { console.error('Error checking user list', e); }
         }
 
-        renderDetail(item);
-    }
+        function render() {
+            // Hero & Poster
+            const bg = currentItem.backdrop || currentItem.image || currentItem.background || '/assets/default_poster.jpg';
+            document.getElementById('hero-bg').style.backgroundImage = `url('${bg}')`;
+            document.getElementById('poster-img').src = currentItem.image || '/assets/default_poster.jpg';
 
-    function renderDetail(item) {
-        const image = item.image || "/assets/default_poster.jpg";
-        document.getElementById("detail-image").src = image;
-        document.getElementById("detail-title").textContent = item.title || item.name || "Untitled";
-        document.getElementById("detail-desc").textContent = item.description || "No description available yet.";
+            // Text
+            document.getElementById('title').innerText = currentItem.title;
+            document.getElementById('description').innerHTML = currentItem.description || "No description available."; // RAWG can have HTML
 
-        const extra = document.getElementById("detail-extra");
-        const typeLabel = formatType(item._type || category);
-        const extraRows = buildMetaRows(item, typeLabel);
-        extra.innerHTML = extraRows.length ? extraRows.join("") : "<p>No extra details available.</p>";
-    }
+            // Badges
+            const badges = document.getElementById('badges');
+            badges.innerHTML = `
+            <span class="meta-tag">${currentItem.type.toUpperCase()}</span>
+            <span class="meta-tag">★ ${currentItem.score ? currentItem.score.toFixed(1) : 'N/A'}</span>
+            <span class="meta-tag">${currentItem.year || (currentItem.release_date || '').split('-')[0] || 'N/A'}</span>
+            <span class="meta-tag">${currentItem.status || 'Unknown Status'}</span>
+        `;
 
-    function buildMetaRows(item, typeLabel) {
-        const rows = [
-            { label: "Type", value: typeLabel },
-            { label: "Score", value: item.score },
-            { label: "Release Date", value: formatDate(item.release_date) },
-            { label: "First Air Date", value: formatDate(item.first_air_date) },
-            { label: "Released", value: formatDate(item.released) },
-            { label: "Start Date", value: formatDate(item.start_date) },
-            { label: "End Date", value: formatDate(item.end_date) },
-            { label: "Year", value: item.year },
-            { label: "Status", value: item.status },
-            { label: "Media Type", value: item.media_type },
-            { label: "Episodes", value: item.episodes },
-            { label: "Chapters", value: item.chapters },
-            { label: "Volumes", value: item.volumes },
-            { label: "Rating", value: item.rating },
-            { label: "Members", value: item.members },
-            { label: "Metacritic", value: item.metacritic },
-            { label: "Popularity", value: item.popularity },
-            { label: "Vote Count", value: item.vote_count },
-            { label: "Ratings Count", value: item.ratings_count },
-            { label: "Original Language", value: item.original_language },
-            { label: "Genres", value: formatList(item.genres) },
-            { label: "Platforms", value: formatList(item.platforms) },
-            { label: "Added", value: formatDate(item.added_at) },
-            { label: "Progress", value: item.progress }
-        ];
+            // Data Grid
+            const grid = document.getElementById('data-grid');
+            const fields = [
+                { l: 'Genres', v: currentItem.genres?.join(', ') },
+                { l: 'Episodes', v: currentItem.episodes },
+                { l: 'Chapters', v: currentItem.chapters },
+                { l: 'Rating', v: currentItem.rating },
+                { l: 'Studio/Dev', v: (currentItem.developers || []).join(', ') }
+            ];
 
-        return rows
-            .filter(row => isValuePresent(row.value))
-            .map(row => `<p><strong>${row.label}:</strong> ${row.value}</p>`);
-    }
+            grid.innerHTML = fields.filter(f => f.v).map(f => `
+            <div class="data-item"><strong>${f.l}</strong> ${f.v}</div>
+        `).join('');
 
-    function formatDate(value) {
-        if (!value) return null;
-        const date = new Date(value);
-        if (Number.isNaN(date.getTime())) return value;
-        return date.toLocaleDateString();
-    }
+            // Action Panel
+            const panel = document.getElementById('action-panel');
+            if (userListEntry) {
+                // Edit Mode
+                const statusOptions = getStatusOptions(type);
+                const statusSelect = statusOptions.map(s =>
+                    `<option value="${s.val}" ${userListEntry.status === s.val ? 'selected' : ''}>${s.label}</option>`
+                ).join('');
 
-    function formatList(values) {
-        if (!Array.isArray(values) || values.length === 0) return null;
-        return values.join(", ");
-    }
+                panel.innerHTML = `
+                <div style="flex-grow:1">
+                    <label style="display:block; font-size:0.8em; margin-bottom:5px;">Your Status</label>
+                    <select id="status-update" style="padding:10px; border-radius:5px; background:#333; color:#fff; border:1px solid #555; width:100%;">
+                        ${statusSelect}
+                    </select>
+                </div>
+                <!-- Optional Score input -->
+                <div style="width: 80px;">
+                     <label style="display:block; font-size:0.8em; margin-bottom:5px;">Score</label>
+                     <input type="number" id="score-update" value="${userListEntry.score || 0}" max="10" min="0" style="padding:10px; width:100%; border-radius:5px;">
+                </div>
+                <button class="action-btn" onclick="handleUpdate()">Update List</button>
+            `;
+            } else {
+                // Add Mode
+                panel.innerHTML = `
+                <p>Add this to your list to track your progress.</p>
+                <button class="action-btn" onclick='window.openAddModal(${JSON.stringify(currentItem).replace(/'/g, "&#39;")}, "${type}")'>+ Add to List</button>
+            `;
+            }
+        }
 
-    function isValuePresent(value) {
-        if (value === null || value === undefined) return false;
-        if (typeof value === "string") return value.trim().length > 0;
-        if (Array.isArray(value)) return value.length > 0;
-        return true;
-    }
+        function getStatusOptions(t) {
+            if (['anime', 'movie', 'series'].includes(t)) {
+                return [
+                    { val: 'watching', label: 'Watching' },
+                    { val: 'completed', label: 'Completed' },
+                    { val: 'on_hold', label: 'On Hold' },
+                    { val: 'dropped', label: 'Dropped' },
+                    { val: 'plan_to_watch', label: 'Plan to Watch' }
+                ];
+            } else if (['manga', 'novel'].includes(t)) {
+                return [
+                    { val: 'reading', label: 'Reading' },
+                    { val: 'completed', label: 'Completed' },
+                    { val: 'on_hold', label: 'On Hold' },
+                    { val: 'dropped', label: 'Dropped' },
+                    { val: 'plan_to_read', label: 'Plan to Read' }
+                ];
+            } else { // Game
+                return [
+                    { val: 'playing', label: 'Playing' },
+                    { val: 'completed', label: 'Completed' },
+                    { val: 'on_hold', label: 'On Hold' },
+                    { val: 'dropped', label: 'Dropped' },
+                    { val: 'plan_to_play', label: 'Plan to Play' }
+                ];
+            }
+        }
 
-    function formatType(rawType) {
-        const map = {
-            movies: "Movie",
-            movie: "Movie",
-            series: "Series",
-            animes: "Anime",
-            anime: "Anime",
-            manga: "Manga",
-            novels: "Novel",
-            novel: "Novel",
-            games: "Game",
-            game: "Game"
-        };
+        window.handleUpdate = function () {
+            const newStatus = document.getElementById('status-update').value;
+            const newScore = document.getElementById('score-update').value;
 
-        return map[rawType] || rawType;
-    }
-</script>
+            // Map backend list type
+            let listType = type;
+            if (type === 'anime') listType = 'animes';
+            if (type === 'movie') listType = 'movies';
+            if (type === 'series') listType = 'series';
+            if (type === 'manga') listType = 'manga';
+            if (type === 'novel') listType = 'novels';
+            if (type === 'game') listType = 'games';
+
+            window.updateItem(listType, id, {
+                status: newStatus,
+                score: Number(newScore)
+            });
+        }
+
+        init();
+    </script>
 
 </body>
+
 </html>

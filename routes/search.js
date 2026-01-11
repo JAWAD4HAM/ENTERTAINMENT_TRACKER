@@ -126,8 +126,106 @@ router.get('/:type', async (req, res) => {
     }
 });
 
-// Get Details Endpoint (Optional but good for full info)
-// ...
+// Get Details Endpoint
+router.get('/details/:type/:id', async (req, res) => {
+    const { type, id } = req.params;
+
+    try {
+        let result = null;
+
+        if (type === 'anime' || type === 'manga' || type === 'novel') {
+            // Jikan API
+            const jikanType = type === 'novel' ? 'manga' : type;
+            const response = await axios.get(`${JIKAN_URL}/${jikanType}/${id}/full`);
+            const item = response.data.data;
+
+            result = {
+                id: item.mal_id,
+                title: item.title,
+                image: item.images.jpg.large_image_url || item.images.jpg.image_url,
+                description: item.synopsis,
+                type: type,
+                score: item.score,
+                status: item.status,
+                year: item.year,
+                episodes: item.episodes,
+                chapters: item.chapters,
+                volumes: item.volumes,
+                rating: item.rating,
+                members: item.members,
+                start_date: item.aired?.from || item.published?.from,
+                end_date: item.aired?.to || item.published?.to,
+                genres: item.genres?.map(g => g.name) || [],
+                background: item.background
+            };
+
+        } else if (type === 'movie' || type === 'series') {
+            // TMDB API
+            const tmdbType = type === 'series' ? 'tv' : 'movie';
+            const config = { params: {} };
+
+            if (TMDB_API_KEY.includes('.')) {
+                config.headers = { Authorization: `Bearer ${TMDB_API_KEY}` };
+            } else {
+                config.params.api_key = TMDB_API_KEY;
+            }
+
+            const response = await axios.get(`${TMDB_URL}/${tmdbType}/${id}`, config);
+            const item = response.data;
+
+            result = {
+                id: item.id,
+                title: item.title || item.name,
+                image: item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : null,
+                backdrop: item.backdrop_path ? `https://image.tmdb.org/t/p/original${item.backdrop_path}` : null,
+                description: item.overview,
+                type: type,
+                score: item.vote_average,
+                status: item.status,
+                release_date: item.release_date || item.first_air_date,
+                runtime: item.runtime || (item.episode_run_time ? item.episode_run_time[0] : null),
+                genres: item.genres?.map(g => g.name) || [],
+                seasons: item.number_of_seasons,
+                episodes: item.number_of_episodes,
+                tagline: item.tagline
+            };
+
+        } else if (type === 'game') {
+            // RAWG API
+            const response = await axios.get(`${RAWG_URL}/games/${id}`, {
+                params: { key: RAWG_API_KEY }
+            });
+            const item = response.data;
+
+
+            result = {
+                id: item.id,
+                title: item.name,
+                image: item.background_image,
+                description: item.description_raw || item.description, // RAWG provides HTML in description
+                type: 'game',
+                score: item.rating,
+                released: item.released,
+                metacritic: item.metacritic,
+                platforms: item.platforms?.map(p => p.platform.name) || [],
+                genres: item.genres?.map(g => g.name) || [],
+                developers: item.developers?.map(d => d.name) || [],
+                website: item.website
+            };
+        }
+
+        if (!result) return res.status(404).json({ message: 'Item not found' });
+
+        res.json(result);
+
+    } catch (error) {
+        console.error('Details API Error:', error.message);
+        if (error.response && error.response.status === 404) {
+            return res.status(404).json({ message: 'Item not found externally' });
+        }
+        res.status(500).json({ message: 'External API Error' });
+    }
+});
 
 // Trending/Popular Endpoint (External APIs)
 router.get('/trending/:type', async (req, res) => {
